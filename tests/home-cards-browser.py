@@ -17,7 +17,7 @@ with sync_playwright() as playwright:
     header = page.locator("header.pulsove-header")
     assert header.count() == 1
     assert header.evaluate("(el) => Math.round(el.getBoundingClientRect().height)") <= 56
-    assert header.get_by_role("navigation", name="Principal").count() == 1
+    assert header.get_by_role("button", name="Abrir menú").count() == 1
     assert header.get_by_role("button", name="Cambiar a modo oscuro").count() == 1
 
     # Both versions of PulsoVE use a top-right icon-only theme toggle.
@@ -182,9 +182,9 @@ with sync_playwright() as playwright:
         switch_bounds = page.locator("header.pulsove-header button[aria-label^='Cambiar a modo']").bounding_box()
         assert switch_bounds is not None
         assert switch_bounds["x"] + switch_bounds["width"] <= width + 1, ("Theme icon off screen", width)
-        assert header.locator("nav").evaluate("(el) => getComputedStyle(el).overflowX") == "auto"
+        assert header.get_by_role("button", name="Abrir menú").count() == 1
         grid_columns = grid.evaluate("(el) => getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length")
-        assert grid_columns == 2, f"Expected 2 columns at {width}px, got {grid_columns}"
+        assert grid_columns == (1 if width < 560 else 2), f"Responsive identity cards at {width}px: {grid_columns}"
         overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         assert overflow <= 2, f"Horizontal overflow at {width}px: {overflow}px"
         geometry = cards.evaluate_all("""(items) => items.map(item => {
@@ -206,14 +206,14 @@ with sync_playwright() as playwright:
         })""")
         for rect in geometry:
             assert rect["title"]["top"] >= rect["link"]["top"] - 1, (width, "title must begin full-width card", rect)
-            assert rect["title"]["width"] >= rect["article"]["width"] - 42, (width, "title too narrow", rect)
-            assert rect["title"]["bottom"] <= rect["logo"]["top"] + 1, (width, "title/logo collision", rect)
+            assert rect["title"]["width"] >= rect["article"]["width"] - 112, (width, "title column too narrow", rect)
+            assert rect["title"]["left"] >= rect["logo"]["right"] + 10, (width, "identity columns overlap", rect)
             assert rect["link"]["bottom"] <= rect["toolbar"]["top"] + 1, (width, "toolbar must be beneath details", rect)
             assert rect["toolbar"]["bottom"] <= rect["article"]["bottom"] + 1, (width, "actions escape card", rect)
             assert rect["logo"]["bottom"] <= rect["chart"]["top"] + 30, (width, "logo/chart collision")
             assert rect["alert"]["right"] + 1 <= rect["star"]["left"], (width, "buttons collide")
             assert rect["chart"]["width"] >= rect["article"]["width"] - 42, (width, "chart too narrow")
-            assert abs(rect["chart"]["height"] - 60) <= 1, (width, "chart heights differ")
+            assert abs(rect["chart"]["height"] - 40) <= 1, (width, "chart heights differ")
         assert max(x["chart"]["width"] for x in geometry) - min(x["chart"]["width"] for x in geometry) < 1, (
             width, "Charts in a row must have identical widths"
         )

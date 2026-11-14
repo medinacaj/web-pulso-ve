@@ -55,7 +55,7 @@ with sync_playwright() as playwright:
         "(el) => getComputedStyle(el).backgroundColor")
     rose_wash = page.locator("#juegos .card .logo-area").first.evaluate(
         "(el) => getComputedStyle(el).backgroundColor")
-    assert sky_wash != rose_wash, ("Distinct category washes", sky_wash, rose_wash)
+    assert sky_wash == rose_wash == "rgb(255, 255, 255)", ("Uniform neutral brand frames", sky_wash, rose_wash)
 
     assert page.locator("#nube .card").count() == 6
     assert page.locator("#correo .card").count() == 6
@@ -157,7 +157,7 @@ with sync_playwright() as playwright:
         count = page.locator("#juegos .cards").evaluate(
             "(el) => getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length"
         )
-        assert count == (1 if width < 360 else (2 if width < 760 else (3 if width < 1060 else 6))), (width, count)
+        assert count == (1 if width < 560 else (2 if width < 840 else (3 if width < 1120 else 4))), (width, count)
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), f"Horizontal overflow: {width}"
         for step in steps.all():
             left = step.bounding_box()
@@ -178,7 +178,8 @@ with sync_playwright() as playwright:
         })""")
         for box in measurements:
             assert box["header"]["top"] >= box["link"]["top"] - 1, (width, "header should start in full-width link", box)
-            assert box["header"]["bottom"] <= box["logo"]["top"] + 1, (width, "header/logo overlap", box)
+            assert box["header"]["left"] >= box["logo"]["right"] + 10, (width, "identity columns overlap", box)
+            assert box["header"]["bottom"] <= box["signal"]["top"] + 1, (width, "header/chart overlap", box)
             assert box["logo"]["bottom"] <= box["signal"]["top"] + 2, (width, "logo/chart overlap", box)
             assert box["link"]["bottom"] <= box["toolbar"]["top"] + 1, (width, "actions must be below card content", box)
             assert box["signal"]["bottom"] <= box["toolbar"]["top"] + 1, (width, "footer overlaps trend", box)

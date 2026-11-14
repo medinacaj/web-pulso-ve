@@ -46,3 +46,5 @@ Los datos de la demo continúan siendo ilustrativos. No se añaden fuentes de te
 Rama fuente `feat/visual-refresh-current`, implementación `89a9b41`; artefacto publicado en `gh-pages` (`6c20075`, avance normal desde `da8e7aa`). Se descargó el HTML de GitHub y coincidió byte a byte con el probado. El análisis Gitleaks no detectó secretos en el artefacto. `main` permanece en `4f09649`.
 
 Dirección pública: https://medinacaj.github.io/web-pulso-ve/. El proxy del entorno rechazó la conexión a ese host con `CONNECT 403`; no se pudo confirmar la disponibilidad pública desde aquí. Esto no es una respuesta de la web publicada ni demuestra una caída.
+
+La composición de tarjetas se revisó de nuevo tras la captura del usuario: [ver tarjetas modernizadas, comparación y medidas](TARJETAS-MODERNIZADAS-2026-11-14.md).

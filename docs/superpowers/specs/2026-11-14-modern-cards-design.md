@@ -1,0 +1,5 @@
+# Tarjetas compactas: corrección solicitada sobre captura
+
+El usuario señaló que los cambios previos no modernizaron las tarjetas: exceso de espacio entre nombre/categoría, logos desiguales y una composición esencialmente igual. Se reemplaza la disposición vertical tipo cartel por una tarjeta compacta de identidad horizontal: marca en marco 56×56 con imagen contenida 40×40, nombre y categoría juntos a su derecha, gráfica secundaria próxima y acciones en pie separado. La cuadrícula tendrá 4/3/2/1 columnas según ancho, permitiendo legibilidad sin reservar bloques vacíos altos.
+
+Se conservan 579 fichas, los 179 archivos de marca con su relación de aspecto y procedencia, los favoritos, enlaces, formulario sin envío y gráficas ilustrativas. Se aplicará composición equivalente a Next sin alterar reportes reales ni lógica de negocio. Verificar especialmente Cloudflare, AWS, Google Cloud, Azure, GitHub y Vercel, con distancias/escala medidas, comparación real y suite existente. No modificar imágenes originales ni simular estados.

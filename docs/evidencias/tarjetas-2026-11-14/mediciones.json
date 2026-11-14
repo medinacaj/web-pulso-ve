@@ -1,0 +1,30 @@
+[
+  {
+    "width": 1365,
+    "cardHeight": 221,
+    "logoBox": 56,
+    "imageBox": 40,
+    "maxNameCategoryGap": 4
+  },
+  {
+    "width": 768,
+    "cardHeight": 221,
+    "logoBox": 56,
+    "imageBox": 40,
+    "maxNameCategoryGap": 4
+  },
+  {
+    "width": 390,
+    "cardHeight": 221,
+    "logoBox": 56,
+    "imageBox": 40,
+    "maxNameCategoryGap": 4
+  },
+  {
+    "width": 320,
+    "cardHeight": 221,
+    "logoBox": 56,
+    "imageBox": 40,
+    "maxNameCategoryGap": 4
+  }
+]

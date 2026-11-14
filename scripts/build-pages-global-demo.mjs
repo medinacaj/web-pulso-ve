@@ -121,8 +121,8 @@ function card(s) {
     :'<span class="monogram">'+escape(monogram(s.name))+'</span>';
   return '<li class="card" data-name="'+escape(s.name.toLocaleLowerCase('es'))+'" data-category="'+escape(s.categorySlug)+'" data-slug="'+escape(s.slug)+'">'+
     '<a class="card-link" href="'+BASE+'/servicios/'+encodeURIComponent(s.slug)+'/'+'" aria-label="Ver ficha de '+escape(s.name)+'">'+
-      '<span class="card-header"><span class="name">'+escape(s.name)+'</span><span class="category">'+escape(s.categoryName)+'</span></span>'+
-      '<span class="logo-area">'+logo+'</span>'+
+      '<span class="card-identity"><span class="logo-area">'+logo+'</span>'+
+      '<span class="card-header"><span class="name" title="'+escape(s.name)+'">'+escape(s.name)+'</span><span class="category" title="'+escape(s.categoryName)+'">'+escape(s.categoryName)+'</span></span></span>'+
       '<span class="signal">'+illustrativeSparkline(s.slug)+
         '</span></a>'+
     '<div class="card-actions" role="group" aria-label="Acciones de '+escape(s.name)+'">'+

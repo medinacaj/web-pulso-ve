@@ -23,24 +23,21 @@ export function ServicePulseCard({
       <article
         data-category={service.categorySlug}
         data-rapid-surge={service.surgeScore > 0 ? 'true' : 'false'}
-        className="service-tile relative flex h-full min-h-[260px] min-w-0 flex-col overflow-hidden bg-surface transition-colors sm:min-h-[270px]"
+        className="service-tile relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-surface transition-colors"
       >
         <Link
           href={`/servicios/${encodeURIComponent(service.slug)}`}
           aria-label={`Ver estado y reportes de ${service.name}`}
           className="service-tile-link flex min-w-0 flex-1 flex-col px-3 pb-2 pt-3 sm:px-4"
         >
-          <div data-card-title className="min-h-[53px] min-w-0">
-            <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug tracking-tight text-ink sm:text-base">
-              {service.name}
-            </h3>
-            <p className="mt-1 truncate text-[10px] font-semibold text-ink-muted sm:text-xs" title={service.categoryName}>
-              {service.categoryName}
-            </p>
-          </div>
-
-          <div data-card-logo className="flex h-[76px] shrink-0 items-center justify-center py-1 sm:h-[84px]">
-            <BrandMark slug={service.slug} name={service.name} categorySlug={service.categorySlug} />
+          <div data-card-identity className="flex min-w-0 items-center gap-3">
+            <div data-card-logo className="flex h-14 w-14 shrink-0 items-center justify-center">
+              <BrandMark slug={service.slug} name={service.name} categorySlug={service.categorySlug} />
+            </div>
+            <div data-card-title className="min-w-0 flex-1">
+              <h3 className="line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-ink" title={service.name}>{service.name}</h3>
+              <p className="mt-1 line-clamp-2 text-xs text-ink-muted" title={service.categoryName}>{service.categoryName}</p>
+            </div>
           </div>
 
           <div className="mt-auto min-w-0">
@@ -77,12 +74,12 @@ export function ServicePulseCard({
           </div>
         </Link>
 
-        <div data-card-actions className="service-tile-actions relative z-20 flex h-10 shrink-0 items-center justify-end gap-2 px-3 sm:px-4">
+        <div data-card-actions className="service-tile-actions relative z-20 flex min-h-16 shrink-0 items-center justify-end gap-2 px-3 sm:px-4">
           <Link
             href={`/servicios/${encodeURIComponent(service.slug)}#reportar`}
             aria-label={`Reportar falla de ${service.name}`}
             title={`Reportar falla de ${service.name}`}
-            className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white transition-[background-color,transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-md active:translate-y-0 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white transition-[background-color,transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-md active:translate-y-0 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
           >
             <span aria-hidden="true" className="text-xl font-black leading-none">!</span>
           </Link>

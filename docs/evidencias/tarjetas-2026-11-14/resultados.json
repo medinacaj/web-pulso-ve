@@ -1,0 +1,69 @@
+{
+  "catalogue": 579,
+  "brandAssetsUnchanged": 179,
+  "before": [
+    {
+      "slug": "cloudflare",
+      "height": 315
+    },
+    {
+      "slug": "amazon-web-services",
+      "height": 315
+    },
+    {
+      "slug": "google-cloud",
+      "height": 315
+    },
+    {
+      "slug": "microsoft-azure",
+      "height": 315
+    },
+    {
+      "slug": "github",
+      "height": 315
+    },
+    {
+      "slug": "vercel",
+      "height": 315
+    }
+  ],
+  "after": [
+    {
+      "width": 1365,
+      "cardHeight": 221,
+      "logoBox": 56,
+      "imageBox": 40,
+      "maxNameCategoryGap": 4
+    },
+    {
+      "width": 768,
+      "cardHeight": 221,
+      "logoBox": 56,
+      "imageBox": 40,
+      "maxNameCategoryGap": 4
+    },
+    {
+      "width": 390,
+      "cardHeight": 221,
+      "logoBox": 56,
+      "imageBox": 40,
+      "maxNameCategoryGap": 4
+    },
+    {
+      "width": 320,
+      "cardHeight": 221,
+      "logoBox": 56,
+      "imageBox": 40,
+      "maxNameCategoryGap": 4
+    }
+  ],
+  "heightReductionPercent": 29.8,
+  "unitTestsPassed": 165,
+  "typecheckPassed": true,
+  "compiledProductionCss": true,
+  "existingStaticBrowserPassed": true,
+  "generalStaticBrowserPassed": true,
+  "independentReview": "No additional defects; 579 cards checked at 320/560/840/1120 px",
+  "fullNextApplicationExecuted": false,
+  "publicAvailabilityVerified": false
+}

@@ -273,3 +273,21 @@ body {
 .pulsove-header > div { position: static; }
 @media(max-width:359px) { .home-featured-band ul, .home-platform-band ul { grid-template-columns: minmax(0,1fr); } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto!important; } }
+
+/* Modern service cards: compact identity, contained brand, close trend and separate actions. */
+.service-tile-link { padding: 16px 16px 0; }
+.service-tile [data-card-identity] { height: 80px; min-height: 80px; }
+.service-tile [data-card-title] { min-height: 0; }
+.service-tile [data-card-title] h3 { font-size: 15px; line-height: 1.35; }
+.service-tile [data-card-title] p { margin-top: 4px; font-size: 12px; font-weight: 500; color: rgb(var(--ink-muted)); }
+.service-tile [data-card-logo] { height: 56px; width: 56px; margin: 0; border: 1px solid #dfe9ed; border-radius: 14px; padding: 8px; background: #fff; }
+.service-tile [data-card-logo] > div > div { padding: 0; border-radius: 0; max-width: none; }
+.service-tile [data-card-logo] img { width: 40px; height: 40px; max-width: 40px; max-height: 40px; object-fit: contain; }
+.service-tile-link > div:last-child { margin-top: 12px; }
+.service-tile [data-card-trend] { height: 40px; }
+.service-tile-actions { border-top: 1px solid rgb(var(--border)); margin-top: 8px; padding-top: 8px; padding-bottom: 12px; }
+.service-tile-actions button { min-width: 44px; min-height: 44px; }
+.home-featured-band > ul, .home-platform-band ul { grid-template-columns: repeat(4,minmax(0,1fr)); }
+@media(max-width:1119px) { .home-featured-band > ul, .home-platform-band ul { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:839px) { .home-featured-band > ul, .home-platform-band ul { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:559px) { .home-featured-band > ul, .home-platform-band ul { grid-template-columns: minmax(0,1fr); } }

@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "cloudflare",
+    "height": 315
+  },
+  {
+    "slug": "amazon-web-services",
+    "height": 315
+  },
+  {
+    "slug": "google-cloud",
+    "height": 315
+  },
+  {
+    "slug": "microsoft-azure",
+    "height": 315
+  },
+  {
+    "slug": "github",
+    "height": 315
+  },
+  {
+    "slug": "vercel",
+    "height": 315
+  }
+]
