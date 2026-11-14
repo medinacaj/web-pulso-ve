@@ -24,3 +24,5 @@ Se conservan las 579 fichas, los 179 activos de marca, gráficos ilustrativos, f
 - Revisión independiente: 579 tarjetas a 320/560/840/1120 px, sin nuevos solapamientos ni desbordamiento demostrados. No equivale a una auditoría completa de accesibilidad.
 
 Los cambios se publican en `gh-pages`, con avance normal de Git y sin fusionar `main`. La comparación se obtuvo de las mismas seis marcas y el mismo viewport; son capturas reales de Chromium.
+
+Publicación: `gh-pages` en `86a6cc5`. Se descargó el HTML de GitHub y coincidió byte a byte con el artefacto probado. La disponibilidad de la URL pública no se comprobó desde el entorno, cuyo proxy bloquea el host de Pages.

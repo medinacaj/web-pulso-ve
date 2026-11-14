@@ -65,5 +65,12 @@
   "generalStaticBrowserPassed": true,
   "independentReview": "No additional defects; 579 cards checked at 320/560/840/1120 px",
   "fullNextApplicationExecuted": false,
-  "publicAvailabilityVerified": false
+  "publicAvailabilityVerified": false,
+  "publication": {
+    "sourceCommit": "e010e3ff531657645289b8d839f45bd3dfcdd716",
+    "pagesCommit": "86a6cc547ba00cf23ab07b87019dd7994577e369",
+    "remoteHtmlMatchesTested": true,
+    "indexSha256": "d48f4bba52c86d13f7b14fab79803aa24be248ae6f5c68f961e2830feeea839c",
+    "artifactGitleaksLeaks": 0
+  }
 }
