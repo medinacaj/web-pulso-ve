@@ -30,3 +30,5 @@ Publicación: `gh-pages` en `86a6cc5`. Se descargó el HTML de GitHub y coincidi
 ## Pendiente para una próxima iteración
 
 El usuario prefiere los logotipos de mayor tamaño de la versión anterior y solicitó guardar el cambio para retomarlo más adelante. Pendiente: aumentar de nuevo su presencia visual, revisando tamaño y composición de las tarjetas sin deformar las marcas ni recuperar los huecos excesivos señalados. El ajuste queda diferido; esta anotación no cambia la demo publicada.
+
+El usuario añadió como pendiente reducir el tamaño visual y mejorar la integración de los iconos de exclamación (reportar) y estrella (favoritos). Aplicar una ampliación ligera al pasar el cursor, sin mover el contenido de la tarjeta; ofrecer respuesta equivalente al foco de teclado y respetar movimiento reducido. Mantener un área cómoda de interacción en pantallas táctiles aunque el icono visible sea más pequeño. Este ajuste también queda diferido.
