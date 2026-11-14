@@ -21,4 +21,4 @@
 - [x] Capturar baseline actual y reproducir pruebas fallidas.
 - [x] Aplicar mejoras y verificar catálogo, UI y CSS Next.
 - [x] Revisión independiente y correcciones comprobadas.
-- [ ] Publicar rama fuente y artefacto estático con evidencia.
+- [x] Publicar rama fuente y artefacto estático con evidencia.

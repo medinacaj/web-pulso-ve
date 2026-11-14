@@ -40,3 +40,9 @@ La revisión independiente detectó dos fallos de la primera adaptación Next: e
 No se modificaron esquema, migraciones ni endpoints. No se repitió la integración DB. El repositorio actual aún declara `next lint`, sin configuración ESLint para Next 16; no se afirma que lint haya pasado ni se cambia ese asunto en esta entrega. Evidencia: [resultados JSON](evidencias/visual-2026-11-14/resultados.json).
 
 Los datos de la demo continúan siendo ilustrativos. No se añaden fuentes de terceros ni se modifica la procedencia/licencia de las marcas existentes. GitHub sirve los archivos públicos; los reportes de demostración no se transmiten. La vista previa no acredita operación productiva, conformidad legal integral ni certificación ITIL/ISO. La publicación puede revertirse mediante un nuevo commit de reversión del cambio en `gh-pages`, sin tocar datos o reescribir historia.
+
+## Entrega
+
+Rama fuente `feat/visual-refresh-current`, implementación `89a9b41`; artefacto publicado en `gh-pages` (`6c20075`, avance normal desde `da8e7aa`). Se descargó el HTML de GitHub y coincidió byte a byte con el probado. El análisis Gitleaks no detectó secretos en el artefacto. `main` permanece en `4f09649`.
+
+Dirección pública: https://medinacaj.github.io/web-pulso-ve/. El proxy del entorno rechazó la conexión a ese host con `CONNECT 403`; no se pudo confirmar la disponibilidad pública desde aquí. Esto no es una respuesta de la web publicada ni demuestra una caída.

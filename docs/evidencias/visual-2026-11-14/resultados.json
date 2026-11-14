@@ -82,5 +82,17 @@
   "databaseChanged": false,
   "databaseIntegrationTestsRerun": false,
   "fullAccessibilityAudit": false,
-  "publicAvailabilityVerified": false
+  "publicAvailabilityVerified": false,
+  "publication": {
+    "sourceCommit": "89a9b41ab0249281877df068f8ae8aa6076e0b5b",
+    "pagesCommit": "6c20075340f4ed67075ebcab4299b72af6b02440",
+    "previousPagesCommit": "da8e7aa0647faae2191269b63b59970f1b5cb84a",
+    "artifactFiles": 764,
+    "githubIndexDownloadedAndMatched": true,
+    "indexSha256": "ab6df3f1b5cb1b1253300557c90b4a934bebbeda4c98b0e2963c1351b9a99e90",
+    "publicAvailabilityVerified": false,
+    "publicCheck": "Environment proxy rejected CONNECT to medinacaj.github.io with 403",
+    "mainUnchanged": "4f09649c19779ab1b6af775681482cb225b6c8be",
+    "artifactGitleaksLeaks": 0
+  }
 }
