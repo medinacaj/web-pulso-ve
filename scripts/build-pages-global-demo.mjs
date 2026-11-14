@@ -15,6 +15,7 @@ import { brandLogoSource } from '../src/lib/brand-logo-sources.ts';
 import { MICROSOFT_FEEDS } from '../src/lib/official-status/microsoft-rss.ts';
 import { getServiceProfile } from '../src/lib/catalog/service-profiles.ts';
 import { methodologyCss, methodologyBody } from './methodology-static.mjs';
+import { visualRefreshCss, enhanceMobileMenu } from './visual-refresh-static.mjs';
 
 const BASE='/web-pulso-ve';
 const OUTPUT='pages-global-demo';
@@ -90,6 +91,7 @@ const CSS=[
 "/* Intentional: compact first screen. The full explanation lives in the footer. */\n.wrap.hero,body[data-theme=\"light\"] .wrap.hero,body[data-theme=\"dark\"] .wrap.hero{padding:20px 22px 16px;margin-top:10px}\n.hero .hero-top{display:block}\n.hero .hero-copy{max-width:100%}\n.hero .hero-copy h1{font-size:clamp(21px,3.3vw,32px);line-height:1.2;margin:0 0 7px}\n.hero .intro-lead{font-size:14px!important;line-height:1.55;margin:0 0 12px!important;max-width:680px!important}\n.hero .stats,.hero .intro-guide,.hero .eyebrow,.hero .intro-actions{display:none}\n.hero .hero-tools{padding-top:8px;margin-top:0}\n.hero .hero-tools .filters{gap:8px;flex-wrap:wrap}\n.hero .home-search-status{font-size:12px}\n.footer-inner{padding-top:22px;padding-bottom:18px}\n.footer-help{padding:0 0 18px}\n.footer-help h2{font-size:17px;line-height:1.4;margin:0 0 6px;color:#effaf7}\n.footer-help p{font-size:13px;line-height:1.6;color:#b9d5d3;margin:0 0 12px}\n.footer-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;list-style:none;margin:0;padding:0}\n.footer-steps li{display:flex;flex-direction:column;gap:4px;min-width:0}\n.footer-steps strong{color:#a7e5d7;font-size:13px}\n.footer-steps li:nth-child(2) strong{color:#ffdfa1}\n.footer-steps li:nth-child(3) strong{color:#ffc4d5}\n.footer-steps span{color:#cbdcde;font-size:12px;line-height:1.6}\n.footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:14px;border-top:1px solid #37515e;padding-top:14px;color:#b9d5d3;font-size:12px}\n.footer-bottom nav{display:flex;gap:20px;flex-wrap:wrap}\n.footer-bottom a{color:#b7ece2;text-decoration:underline;text-underline-offset:3px}\nbody[data-theme=\"light\"] .footer-help h2{color:#143d4c}\nbody[data-theme=\"light\"] .footer-help p,body[data-theme=\"light\"] .footer-steps span,body[data-theme=\"light\"] .footer-bottom{color:#3c5661}\nbody[data-theme=\"light\"] .footer-steps strong{color:#18665b}\nbody[data-theme=\"light\"] .footer-steps li:nth-child(2) strong{color:#80520e}\nbody[data-theme=\"light\"] .footer-steps li:nth-child(3) strong{color:#a63761}\nbody[data-theme=\"light\"] .footer-bottom{border-color:#d2dfe4}\nbody[data-theme=\"light\"] .footer-bottom a{color:#146b84}\n@media(max-width:760px){.wrap.hero,body[data-theme=\"light\"] .wrap.hero,body[data-theme=\"dark\"] .wrap.hero{padding:17px 14px 14px;margin-top:8px}.footer-steps{grid-template-columns:1fr;gap:10px}.footer-steps li{flex-direction:row;gap:9px}.footer-steps strong{flex:0 0 64px}.footer-steps span{min-width:0}.hero .hero-tools .filters{gap:6px}}\n"
 ,
   methodologyCss,
+  visualRefreshCss,
 ].join('\n');
 
 function monogram(name){const parts=name.trim().split(/\s+/);return parts.length>1?parts.slice(0,2).map((s)=>s[0]).join('').toUpperCase():name.slice(0,2).toUpperCase();}
@@ -131,7 +133,7 @@ function card(s) {
 function header(){
  return '<header class="top"><div class="wrap nav"><a class="brand" href="'+BASE+'/">Pulso<span>VE</span></a>'+
    '<nav class="navlinks" aria-label="Navegación"><a href="'+BASE+'/">Inicio</a><a href="'+BASE+'/servicios/">Servicios</a></nav>'+
-   '<button type="button" id="theme-toggle" class="theme-toggle" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button></div></header>';
+   '<button type="button" id="theme-toggle" class="theme-toggle" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button><details id="mobile-menu" class="mobile-menu"><summary role="button" aria-label="Abrir menú"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><nav class="mobile-nav" aria-label="Navegación móvil"><a href="'+BASE+'/">Inicio</a><a href="'+BASE+'/servicios/">Servicios</a><a href="'+BASE+'/metodologia/">Metodología</a></nav></details></div></header>';
 }
 
 const DEMO_REPORT_ISSUES = Object.fromEntries(categoriesSeed.map((category) => [
@@ -165,7 +167,7 @@ function layout(title,body,description){
   '<nav aria-label="Enlaces del pie de página"><a href="'+BASE+'/servicios/">Servicios</a>'+
   '<a href="'+BASE+'/metodologia/">Metodología</a>'+ 
    '<a href="'+BASE+'/creditos-marcas/">Logos y créditos</a></nav></div></div></footer>'+REPORT_MODAL+
-  '<script>const PREVIEW_ISSUES='+JSON.stringify(DEMO_REPORT_ISSUES).replace(/</g,'\\u003c')+';'+clientEnhance.toString()+';clientEnhance();'+demoChartInteraction.toString()+';demoChartInteraction();</script></body></html>';
+  '<script>const PREVIEW_ISSUES='+JSON.stringify(DEMO_REPORT_ISSUES).replace(/</g,'\\u003c')+';'+clientEnhance.toString()+';clientEnhance();'+enhanceMobileMenu.toString()+';enhanceMobileMenu();'+demoChartInteraction.toString()+';demoChartInteraction();</script></body></html>';
 }
 function group(title,desc,items,id){
  const number=id==='ve'?'01':String(homeSections.findIndex((section)=>section.id===id)+2).padStart(2,'0');
@@ -184,7 +186,7 @@ if(homeSections.length!==8||homeSections.some((s)=>s.items.length!==6))throw Err
 const hero='<div class="wrap hero"><div class="hero-top"><div class="hero-copy">'+
 '<h1>¿Tu internet, banco o aplicación está fallando?</h1>'+
 '<p class="intro-lead">Busca tu servicio y consulta su información en PulsoVE.</p>'+
-'</div></div><div class="hero-tools"><div class="filters"><input id="quicksearch" type="search" class="input" placeholder="Buscar un servicio, juego o aplicación…" aria-label="Buscar entre tarjetas visibles">'+
+'</div></div><div class="hero-tools"><div class="filters"><label for="quicksearch" class="search-label">Buscar un servicio</label><input id="quicksearch" type="search" class="input" placeholder="Buscar un servicio, juego o aplicación…" aria-label="Buscar entre tarjetas visibles">'+
 '<button id="reset-home-search" class="reset-home-search" type="button" hidden>Limpiar</button>'+
 '<a class="chip" href="'+BASE+'/servicios/">Ver plataformas</a></div>'+
 '<div class="filters" role="group" aria-label="Filtrar destacados por tipo">'+
@@ -247,7 +249,7 @@ function serviceDetailHtml(s){
         '<h3>Tipo de servicio</h3><p class="profile-value">'+escape(profile.type)+'</p>'+
         '<p class="profile-note">Información editorial orientativa. La identificación no supone afiliación con PulsoVE.</p></section>'+
       '<section class="profile-panel"><h2>Estado y alcance</h2>'+
-        '<p class="profile-value">Estado actual no consultado</p>'+
+        '<p><span class="status-neutral">Estado actual no consultado</span></p>'+
         '<p>Comprueba la fuente oficial del proveedor para consultar su estado actual.</p>'+
         '<p class="profile-note">La ausencia de reportes no confirma disponibilidad.</p></section>'+
       '<section class="profile-panel profile-wide"><h2>Acerca de la empresa y el servicio</h2>'+
@@ -313,7 +315,8 @@ function clientEnhance(){
      if(order==='category'){const delta=a.dataset.category.localeCompare(b.dataset.category,'es');if(delta)return delta;}
      return nameSort(a,b);
    });
-   container.append(...cards);
+   // Preserve the active pointer target when an unchanged sort runs on input blur.
+    if(cards.some((card,index)=>container.children[index]!==card))container.append(...cards);
    for(const el of cards){
      const ok=(!text||el.dataset.name.includes(text)||el.dataset.slug.includes(text))&&(!cat||el.dataset.category===cat)&&(!fav||saved.includes(el.dataset.slug));
      el.hidden=!ok;if(ok)visible++;

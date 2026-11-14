@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getHomeData } from '@/lib/queries/home';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { getOverviewStatus } from '@/lib/presentation/overview-status';
 import { ServicePulseCard } from '@/components/home/ServicePulseCard';
 import { HomeAutoRefresh } from '@/components/home/HomeAutoRefresh';
 import { OfficialMicrosoftStatus } from '@/components/home/OfficialMicrosoftStatus';
@@ -19,6 +20,7 @@ const METHODOLOGY_STEPS = [
 
 export default async function HomePage() {
   const data = await getHomeData();
+  const overview = getOverviewStatus(data.services.map(service => service.status), data.totals.incidentsOpen);
 
   return (
     <>
@@ -33,8 +35,8 @@ export default async function HomePage() {
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[#dceeea]">
               Busca servicios, consulta reportes de otras personas y comparte un problema.
             </p>
-            <form action="/servicios" className="mt-3 flex max-w-xl gap-2">
-              <label htmlFor="hero-search" className="sr-only">Buscar un servicio</label>
+            <form action="/servicios" className="mt-3 grid max-w-xl grid-cols-[minmax(0,1fr)_auto] gap-2">
+              <label htmlFor="hero-search" className="field-label col-span-2">Buscar un servicio</label>
               <input
                 id="hero-search"
                 name="q"
@@ -48,7 +50,7 @@ export default async function HomePage() {
               </button>
             </form>
           </div>
-          <dl className="grid grid-cols-2 gap-4 rounded-lg bg-surface px-4 py-3 text-center shadow-sm"
+          <div className="home-summary min-w-0" aria-label="Panorama de reportes"><dl className="grid grid-cols-2 gap-4 rounded-lg bg-surface px-4 py-3 text-center shadow-sm"
             aria-label="Actividad reciente de reportes">
             <div>
               <dt className="text-xs text-ink-muted">Reportes (24h)</dt>
@@ -58,7 +60,7 @@ export default async function HomePage() {
               <dt className="text-xs text-ink-muted">Incidentes activos</dt>
               <dd className="font-mono text-xl font-semibold tabular-nums">{data.totals.incidentsOpen}</dd>
             </div>
-          </dl>
+          </dl><div className="px-4 pb-3"><StatusBadge status={overview} size="sm" /><p className="mt-2 text-xs text-ink-muted">Cero incidentes no confirma disponibilidad normal.</p></div></div>
         </div>
       </section>
 

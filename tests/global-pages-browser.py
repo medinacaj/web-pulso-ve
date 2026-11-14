@@ -19,7 +19,8 @@ with sync_playwright() as playwright:
     nav = topbar.locator(".wrap.nav")
     assert topbar.count() == 1
     assert nav.evaluate("(el) => Math.round(el.getBoundingClientRect().height)") == 54
-    assert topbar.get_by_role("navigation").count() == 1
+    assert topbar.get_by_role("button", name="Abrir menú").count() == 1
+    assert not topbar.locator("#mobile-menu").evaluate("el => el.open")
     assert topbar.locator(".theme-toggle svg").count() == 1
 
     assert page.get_by_text("VISTA PREVIA PÚBLICA").count() == 0
@@ -74,7 +75,7 @@ with sync_playwright() as playwright:
     # The removed decoration is the colored line, not radius or shadow.
     borderless = page.locator("#nube .card").first
     assert borderless.evaluate("(el) => getComputedStyle(el).borderTopWidth") == "0px"
-    assert borderless.evaluate("(el) => getComputedStyle(el).borderTopLeftRadius") == "13px"
+    assert borderless.evaluate("(el) => getComputedStyle(el).borderTopLeftRadius") == "16px"
     assert borderless.evaluate("(el) => getComputedStyle(el).boxShadow") != "none"
     colors = page.locator("#nube .card").first.evaluate("(el) => getComputedStyle(el).getPropertyValue('--plot').trim()")
     games_color = page.locator("#juegos .card").first.evaluate("(el) => getComputedStyle(el).getPropertyValue('--plot').trim()")
@@ -86,7 +87,7 @@ with sync_playwright() as playwright:
           return { border: s.borderTopWidth, radius: s.borderTopLeftRadius, shadow: s.boxShadow }
         }""")
         assert appearance["border"] == "0px", ("No colored top border", appearance)
-        assert appearance["radius"] == "13px", ("Restore softly rounded cards", appearance)
+        assert appearance["radius"] == "16px", ("Restore softly rounded cards", appearance)
         assert appearance["shadow"] != "none", ("Restore restrained depth", appearance)
         link = card.locator(":scope > a.card-link")
         assert link.count() == 1
@@ -97,7 +98,7 @@ with sync_playwright() as playwright:
             assert button.evaluate("(el) => getComputedStyle(el).pointerEvents") == "auto"
     hero = page.locator(".wrap.hero").first
     assert hero.evaluate("(el) => getComputedStyle(el).borderTopWidth") == "0px"
-    assert hero.evaluate("(el) => getComputedStyle(el).borderTopLeftRadius") == "16px"
+    assert hero.evaluate("(el) => getComputedStyle(el).borderTopLeftRadius") == "18px"
     assert hero.evaluate("(el) => getComputedStyle(el).boxShadow") != "none"
 
     # Quick filters, search reset, keyboard search and display mode are real controls.
@@ -156,7 +157,7 @@ with sync_playwright() as playwright:
         count = page.locator("#juegos .cards").evaluate(
             "(el) => getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length"
         )
-        assert count == (2 if width < 760 else (3 if width < 1060 else 6)), (width, count)
+        assert count == (1 if width < 360 else (2 if width < 760 else (3 if width < 1060 else 6))), (width, count)
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), f"Horizontal overflow: {width}"
         for step in steps.all():
             left = step.bounding_box()
@@ -211,7 +212,7 @@ with sync_playwright() as playwright:
     report = cloudflare_card.locator("button[data-report='cloudflare']")
     assert report.count() == 1, "Every card needs a quick report action"
     assert report.inner_text() == "!", "Report must be a compact icon, not a large text button"
-    assert report.evaluate("(el) => Math.round(el.getBoundingClientRect().width)") <= 40
+    assert 44 <= report.evaluate("(el) => Math.round(el.getBoundingClientRect().width)") <= 48
     assert report.evaluate("(el) => getComputedStyle(el).backgroundColor") == "rgb(198, 41, 52)"
     star = cloudflare_card.locator("button[data-fav='cloudflare']")
     assert report.evaluate("(el) => el.getBoundingClientRect().right") < star.evaluate("(el) => el.getBoundingClientRect().left")
@@ -382,6 +383,7 @@ with sync_playwright() as playwright:
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), ("detail overflow", width)
     page.get_by_role("link", name="Volver a servicios").click()
     assert page.url.endswith("/web-pulso-ve/servicios/")
+    page.wait_for_load_state("domcontentloaded")
     assert page.locator("#directory-cards .card").count() == 579
     page.goto(ROOT + "servicios/cloudflare/", wait_until="networkidle")
     assert page.get_by_role("heading", name="Cloudflare", exact=True).count() == 1

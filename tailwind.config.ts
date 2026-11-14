@@ -32,9 +32,9 @@ const config: Config = {
           600: '#009c86',
         },
         status: {
-          normal: '#1e9e6b',
-          elevated: '#c98a12',
-          incident: '#d1493f',
+          normal: 'rgb(var(--status-normal) / <alpha-value>)',
+          elevated: 'rgb(var(--status-elevated) / <alpha-value>)',
+          incident: 'rgb(var(--status-incident) / <alpha-value>)',
           unknown: '#6b7280',
         },
       },

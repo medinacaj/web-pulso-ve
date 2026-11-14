@@ -255,3 +255,21 @@ body {
 @media (max-width: 639px) {
   .home-hero > div { padding-top: 16px; padding-bottom: 16px; }
 }
+
+/* Visual refresh: keep the current catalogue, brand assets and editorial palette. */
+:root { --status-normal: 19 117 71; --status-elevated: 133 77 14; --status-incident: 185 28 28; }
+.dark { --status-normal: 74 222 128; --status-elevated: 253 224 71; --status-incident: 248 113 113; }
+@layer components {
+  .field-control { @apply min-h-11 w-full rounded-xl border border-border bg-surface px-3 py-2.5 text-sm text-ink; }
+  .field-label { @apply mb-1 block text-xs font-semibold; }
+  .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700; }
+}
+.home-hero > div > div.home-summary { background: rgb(var(--surface)); color: rgb(var(--ink)); border-radius: 16px; }
+.home-hero > div > div.home-summary p { color: rgb(var(--ink-muted)); }
+.home-hero form > label { color: #e9f7f6; }
+.home-hero input, .home-hero button { min-height: 46px; border-radius: 11px; }
+.service-tile, .directory-service-link::after { border-radius: 16px; }
+.status-pill svg { flex-shrink: 0; }
+.pulsove-header > div { position: static; }
+@media(max-width:359px) { .home-featured-band ul, .home-platform-band ul { grid-template-columns: minmax(0,1fr); } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto!important; } }

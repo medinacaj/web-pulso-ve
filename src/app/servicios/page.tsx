@@ -65,7 +65,7 @@ export default async function ServicesDirectoryPage({
           type="search"
           defaultValue={params.q}
           placeholder="Buscar un servicio…"
-          className="w-full min-w-0 rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+          className="w-full min-w-0 field-control"
         />
 
         <label className="sr-only" htmlFor="category">
@@ -75,7 +75,7 @@ export default async function ServicesDirectoryPage({
           id="category"
           name="category"
           defaultValue={params.category ?? ''}
-          className="w-full min-w-0 rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+          className="w-full min-w-0 field-control"
         >
           <option value="">Toda categoría</option>
           {categoryList.map((c) => (
@@ -92,7 +92,7 @@ export default async function ServicesDirectoryPage({
           id="status"
           name="status"
           defaultValue={validStatus ?? ''}
-          className="w-full min-w-0 rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+          className="w-full min-w-0 field-control"
         >
           <option value="">Todo estado</option>
           {STATUS_OPTIONS.map((o) => (
@@ -109,7 +109,7 @@ export default async function ServicesDirectoryPage({
           id="sort"
           name="sort"
           defaultValue={validSort ?? 'activity'}
-          className="w-full min-w-0 rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+          className="w-full min-w-0 field-control"
         >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>
@@ -118,7 +118,7 @@ export default async function ServicesDirectoryPage({
           ))}
         </select>
 
-        <button type="submit" className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
+        <button type="submit" className="btn-primary">
           Filtrar
         </button>
       </form>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { MobileNav } from './MobileNav';
 import { ROUTE, isRouteAvailable } from '@/lib/nav';
 
 // Solo las páginas que existen (ver src/lib/nav.ts): un enlace a una página
@@ -27,7 +28,7 @@ export function Header() {
 
         {/* También en móvil (antes `hidden md:flex` dejaba el menú sin enlaces); si algún día hay
             más enlaces de los que caben, se desplaza en horizontal en vez de romper el encabezado. */}
-        <nav aria-label="Principal" className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto whitespace-nowrap sm:gap-4">
+        <nav aria-label="Principal" className="hidden min-w-0 flex-1 items-center gap-4 whitespace-nowrap lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -60,6 +61,7 @@ export function Header() {
             Reportar un problema
           </Link>
           <ThemeToggle />
+          <MobileNav />
         </div>
       </div>
     </header>

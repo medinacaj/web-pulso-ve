@@ -1,0 +1,86 @@
+{
+  "baseCommit": "4f09649c19779ab1b6af775681482cb225b6c8be",
+  "catalogue": 579,
+  "categories": 18,
+  "logos": 179,
+  "unitTests": 165,
+  "typecheck": true,
+  "staticCheck": true,
+  "existingBrowserSuite": true,
+  "visualBrowser": {
+    "catalogue": 579,
+    "featured": 60,
+    "mobileMenu": true,
+    "keyboard": true,
+    "widths": [
+      320,
+      390,
+      768,
+      1365
+    ],
+    "favorites": true,
+    "search": true,
+    "detailsAndCharts": true,
+    "noTransmissions": true,
+    "contrast": {
+      "light": [
+        {
+          "selector": ".hero .intro-lead",
+          "ratio": 10.071423908746803
+        },
+        {
+          "selector": ".search-label",
+          "ratio": 10.972562568234034
+        },
+        {
+          "selector": ".group .hint",
+          "ratio": 4.947875636736918
+        },
+        {
+          "selector": ".card .name",
+          "ratio": 13.624716282183247
+        },
+        {
+          "selector": ".card .category",
+          "ratio": 6.102761475436297
+        }
+      ],
+      "dark": [
+        {
+          "selector": ".hero .intro-lead",
+          "ratio": 10.071423908746803
+        },
+        {
+          "selector": ".search-label",
+          "ratio": 10.972562568234034
+        },
+        {
+          "selector": ".group .hint",
+          "ratio": 9.413766626097136
+        },
+        {
+          "selector": ".card .name",
+          "ratio": 12.732973988999998
+        },
+        {
+          "selector": ".card .category",
+          "ratio": 7.99235989469195
+        }
+      ]
+    },
+    "reducedMotion": true
+  },
+  "nextCssFocused": {
+    "productionCss": true,
+    "mobileSearchRow": true,
+    "lightSummary": {
+      "background": "rgb(255, 255, 255)",
+      "radius": "16px",
+      "color": "rgb(83, 100, 104)"
+    }
+  },
+  "databaseChanged": false,
+  "databaseIntegrationTestsRerun": false,
+  "fullAccessibilityAudit": false,
+  "publicAvailabilityVerified": false
+}

@@ -92,7 +92,7 @@ export function StatusBadge({
   const iconSize = size === 'sm' ? 14 : 16;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 font-medium ${visual.colorClass} ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
+    <span data-status={status} className={`status-pill inline-flex max-w-full items-center gap-1.5 rounded-full border border-current/20 px-2.5 py-1 font-medium ${visual.colorClass} ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
       {visual.icon && (
         <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
           {ICONS[visual.icon]}

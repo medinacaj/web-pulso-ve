@@ -100,7 +100,7 @@ export function ReportForm({
             id={`${formId}-issue`}
             name="issueTypeSlug"
             required
-            className="mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+            className="mt-1 w-full field-control"
           >
             {issueTypes.map((o) => (
               <option key={o.slug} value={o.slug}>
@@ -118,7 +118,7 @@ export function ReportForm({
             id={`${formId}-state`}
             name="stateCode"
             required
-            className="mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+            className="mt-1 w-full field-control"
           >
             {states.map((o) => (
               <option key={o.code} value={o.code}>
@@ -144,7 +144,7 @@ export function ReportForm({
             name="cityText"
             type="text"
             maxLength={120}
-            className="mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+            className="mt-1 w-full field-control"
           />
         </div>
 
@@ -158,7 +158,7 @@ export function ReportForm({
             type="text"
             maxLength={64}
             placeholder="Ej. CANTV ABA, WiFi Movistar…"
-            className="mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+            className="mt-1 w-full field-control"
           />
         </div>
         </div>
@@ -171,7 +171,7 @@ export function ReportForm({
             name="comment"
             maxLength={280}
             rows={2}
-            className="mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-pulse-500"
+            className="mt-1 w-full field-control"
           />
         </div>
       </details>
@@ -203,7 +203,7 @@ export function ReportForm({
       <button
         type="submit"
         disabled={state.kind === 'sending' || !consent}
-        className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         {state.kind === 'sending' ? 'Enviando…' : 'Enviar reporte'}
       </button>
