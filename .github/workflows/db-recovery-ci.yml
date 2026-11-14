@@ -36,7 +36,7 @@ jobs:
       DATABASE_URL: postgresql://ci:ci@localhost:5432/pulsove_ci
       ANONYMIZATION_SALT: SYNTHETIC_CI_ONLY_RESTORE_TEST_NEVER_REAL_USERS_1234
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
