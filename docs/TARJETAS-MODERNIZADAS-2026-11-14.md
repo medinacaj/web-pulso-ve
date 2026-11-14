@@ -26,3 +26,7 @@ Se conservan las 579 fichas, los 179 activos de marca, gráficos ilustrativos, f
 Los cambios se publican en `gh-pages`, con avance normal de Git y sin fusionar `main`. La comparación se obtuvo de las mismas seis marcas y el mismo viewport; son capturas reales de Chromium.
 
 Publicación: `gh-pages` en `86a6cc5`. Se descargó el HTML de GitHub y coincidió byte a byte con el artefacto probado. La disponibilidad de la URL pública no se comprobó desde el entorno, cuyo proxy bloquea el host de Pages.
+
+## Pendiente para una próxima iteración
+
+El usuario prefiere los logotipos de mayor tamaño de la versión anterior y solicitó guardar el cambio para retomarlo más adelante. Pendiente: aumentar de nuevo su presencia visual, revisando tamaño y composición de las tarjetas sin deformar las marcas ni recuperar los huecos excesivos señalados. El ajuste queda diferido; esta anotación no cambia la demo publicada.
