@@ -83,7 +83,7 @@ jobs:
           curl -fsS http://127.0.0.1:3057/ >/dev/null
       - name: Upload staging package for manual Namecheap/cPanel installation
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pulsove-namecheap-staging-${{ github.sha }}
           path: .next/standalone/
