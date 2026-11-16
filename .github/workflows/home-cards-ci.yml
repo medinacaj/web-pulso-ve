@@ -128,7 +128,7 @@ jobs:
           curl -fsS http://127.0.0.1:3057/ >/dev/null
       - name: Audit runtime dependencies
         run: npm audit --omit=dev --audit-level=high
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Prepare Chromium smoke test
