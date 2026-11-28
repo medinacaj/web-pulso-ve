@@ -343,6 +343,7 @@ Nunca guardar `DATABASE_URL` ni `ANONYMIZATION_SALT` de producción en Git o en 
 - Para operar en varias instancias, configurar Redis. Si Redis está configurado pero se pierde, la recepción de reportes falla de forma restrictiva: **no se degrada a contadores aislados por proceso**. Solo una instalación de una instancia puede utilizar el límite en memoria.
 - El límite por red puede afectar a usuarios legítimos que comparten NAT; se debe ajustar con métricas anonimizadas y pruebas autorizadas. Sin proxy verificado, la cuota por red permanece sin activar y ese riesgo debe constar en el despliegue.
 - `npm run test:unit` comprueba la procedencia de IP, normalización y cuota. Antes del lanzamiento quedan pendientes despliegue real, abuso distribuido y pruebas de privacidad por un responsable.
+- **Cloudflare Turnstile (28-11-2026), desactivado por defecto.** Con `ENABLE_TURNSTILE="true"` y las dos claves, el formulario de reporte muestra el widget y `POST /api/reports` valida el token con Cloudflare antes de tocar la base. Falla cerrada: sin claves o sin respuesta de Cloudflare responde 503; token ausente o rechazado, 400 `verification_failed`. No se envía la IP a Cloudflare y el token no se guarda. Desactivado, la página no carga nada de Cloudflare. Probado con `fetch` simulado y en el navegador sin acceso a Cloudflare (el envío queda bloqueado); **no** probado contra Cloudflare real. Los comentarios y el registro de cuentas aún no lo usan.
 
 ## Estado verificado del código y publicación · 13 de noviembre de 2026
 
@@ -352,7 +353,8 @@ El catálogo y la aplicación Next.js comparten código y recursos de marca, per
 - **Vista previa estática de GitHub Pages**: genera 579 fichas demostrativas con gráficos ficticios claramente identificados y sin transmisión de reportes. Su aprobación en CI no confirma la publicación del bundle ni demuestra monitorización activa.
 - **Logos**: recursos locales con procedencia documentada y fallback tipográfico. Véase `docs/LOGOS_EMPRESAS.md`. No se deben sustituir recursos faltantes con logotipos inventados o de otras empresas.
 
-El `package-lock.json` revisado resuelve `next@16.4.1`, `zod@4.6.7`,
+El `package-lock.json` revisado resuelve `next@16.4.6` (actualizado el 28/11/2026: 16.4.1 tenía avisos
+moderados, GHSA-mfr8-8qww-v76h y otros, y `next build` se detenía con `SecurityFatalError`), `zod@4.6.7`,
 `sharp@0.35.5` y `source-map-js@1.2.2`. [La verificación de integración #43374657924](https://github.com/medinacaj/web-downdetector-ve/actions/runs/43374657924)
 ejecutó `npm audit --omit=dev --audit-level=high` con resultado
 `found 0 vulnerabilities` para ese build. El control programado de auditoría

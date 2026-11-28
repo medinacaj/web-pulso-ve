@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { POST } from '../src/app/api/reports/route';
 import { _resetMemoryRateLimits } from '../src/lib/security/rate-limit';
 
@@ -85,5 +85,31 @@ describe('POST /api/reports (integración, Postgres real)', () => {
       lastStatus = res.status;
     }
     expect(lastStatus).toBe(429);
+  });
+});
+
+describe('POST /api/reports con Turnstile activado (fetch simulado, Postgres real)', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+    _resetMemoryRateLimits();
+  });
+
+  it('token aceptado → 201 y el token no se guarda', async () => {
+    vi.stubEnv('ENABLE_TURNSTILE', 'true');
+    vi.stubEnv('TURNSTILE_SITE_KEY', 'site');
+    vi.stubEnv('TURNSTILE_SECRET_KEY', 'secret');
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ success: true }), { status: 200 })));
+    const res = await POST(
+      makeRequest({
+        serviceSlug: 'movistar',
+        issueTypeSlug: 'lentitud',
+        stateCode: 'VE-M',
+        deviceSeed: `vitest-turnstile-${Math.random()}`,
+        turnstileToken: 'token-de-un-solo-uso',
+      }),
+    );
+    expect(res.status).toBe(201);
+    expect(JSON.stringify(await res.json())).not.toContain('token-de-un-solo-uso');
   });
 });

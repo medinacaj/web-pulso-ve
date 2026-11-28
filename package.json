@@ -31,7 +31,7 @@
     "drizzle-orm": "^0.45.2",
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
-    "next": "16.4.1",
+    "next": "16.4.6",
     "postgres": "^3.4.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

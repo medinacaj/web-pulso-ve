@@ -54,7 +54,7 @@ jobs:
             for(let i=0;i<3;i++){if(a[i]>b[i])return true;if(a[i]<b[i])return false}
             return true;
           };
-          if(pkg.dependencies.next!=='16.4.1' || lock.packages[''].dependencies.next!=='16.4.1' || v('next')!=='16.4.1') throw Error('Next.js is not pinned and locked at 16.4.1');
+          if(pkg.dependencies.next!=='16.4.6' || lock.packages[''].dependencies.next!=='16.4.6' || v('next')!=='16.4.6') throw Error('Next.js is not pinned and locked at 16.4.6');
           if(!atLeast(v('sharp'),'0.35.5')) throw Error('sharp below 0.35.5');
           if(!atLeast(v('source-map-js'),'1.2.2')) throw Error('source-map-js below 1.2.2');
           if(pkg.dependencies.zod!=='4.6.7' || lock.packages[''].dependencies.zod!=='4.6.7' || v('zod')!=='4.6.7')throw Error('Zod is not pinned and locked at 4.6.7');

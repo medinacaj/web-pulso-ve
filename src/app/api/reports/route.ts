@@ -7,6 +7,7 @@ import { hashAnonymousId, hashIpPrefix, getClientIp } from '@/lib/privacy';
 import { checkRateLimit } from '@/lib/security/rate-limit';
 import { readLimitedJson, RequestBodyTooLargeError } from '@/lib/api/limited-json';
 import { ok, apiError, withErrorHandling } from '@/lib/api/respond';
+import { getTurnstileConfig, verifyTurnstileToken } from '@/lib/security/turnstile';
 
 const REPORT_LIMIT_PER_HASH = Number(process.env.RATE_LIMIT_REPORTS_MAX ?? 5);
 const REPORT_WINDOW_SECONDS = Number(process.env.RATE_LIMIT_REPORTS_WINDOW_SECONDS ?? 3600);
@@ -78,6 +79,25 @@ async function handlePOST(request: Request) {
     });
   }
   const input = parsed.data;
+
+  // Anti-robots (Cloudflare Turnstile), antes de tocar la base. Desactivado por
+  // defecto; activado, falla cerrada: sin claves o sin respuesta de Cloudflare no se
+  // acepta el reporte. A Cloudflare no se le envía la IP.
+  const turnstile = getTurnstileConfig();
+  if (turnstile.enabled) {
+    if ('misconfigured' in turnstile) {
+      console.error(`PulsoVE: Turnstile mal configurado: ${turnstile.misconfigured}`);
+      return apiError('service_unavailable', 'La verificación anti-robots no está disponible. Intenta más tarde.');
+    }
+    const check = await verifyTurnstileToken(input.turnstileToken, turnstile.secretKey);
+    if (!check.ok && check.reason === 'unavailable') {
+      console.error(`PulsoVE: no se pudo verificar Turnstile (${check.detail})`);
+      return apiError('service_unavailable', 'La verificación anti-robots no está disponible. Intenta más tarde.');
+    }
+    if (!check.ok) {
+      return apiError('verification_failed', 'No se pudo verificar que el reporte lo envía una persona. Vuelve a intentarlo.');
+    }
+  }
 
   // Resolver referencias por slug/código a id — 404 explícito si no existen,
   // nunca insertar con una referencia adivinada.

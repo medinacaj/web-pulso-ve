@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TURNSTILE_TOKEN_MAX_LENGTH } from '@/lib/security/turnstile';
 
 /**
  * Cuerpo de POST /api/reports. Corresponde a los campos del formulario del
@@ -19,6 +20,8 @@ export const createReportSchema = z.object({
   // Generado y persistido por el cliente (p. ej. UUID en localStorage).
   // Nunca es un dato personal; ver src/lib/privacy.ts.
   deviceSeed: z.string().min(8).max(128),
+  // Token del widget de Cloudflare Turnstile; solo se exige con ENABLE_TURNSTILE="true".
+  turnstileToken: z.string().max(TURNSTILE_TOKEN_MAX_LENGTH).optional(),
 });
 
 export type CreateReportInput = z.infer<typeof createReportSchema>;

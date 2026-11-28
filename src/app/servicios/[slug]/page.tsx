@@ -11,6 +11,7 @@ import { TechnicalHistoryChart } from '@/components/service/TechnicalHistoryChar
 import { TopIssuesBreakdown } from '@/components/service/TopIssuesBreakdown';
 import { ServiceComments } from '@/components/service/ServiceComments';
 import { getServiceProfile } from '@/lib/catalog/service-profiles';
+import { getTurnstileSiteKey } from '@/lib/security/turnstile';
 
 function formatDateTime(date: Date | null) {
   if (!date) return null;
@@ -166,7 +167,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         <h2 id="reportar-title" className="font-display text-lg font-semibold">Reportar una falla de {service.name}</h2>
         <p className="mt-1 text-sm text-ink-muted">Selecciona el problema y tu estado, acepta la declaración y envía. Puedes añadir detalles opcionales.</p>
         <div className="mt-4">
-          <ReportForm serviceSlug={service.slug} issueTypes={issueTypeOptions} states={allStates} />
+          <ReportForm serviceSlug={service.slug} issueTypes={issueTypeOptions} states={allStates} turnstileSiteKey={getTurnstileSiteKey()} />
         </div>
       </section>
 

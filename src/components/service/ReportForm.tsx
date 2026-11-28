@@ -2,6 +2,8 @@
 
 import { useId, useState } from 'react';
 import { ROUTE, isRouteAvailable } from '@/lib/nav';
+import { TURNSTILE_SCRIPT_URL } from '@/lib/security/turnstile';
+import { TurnstileWidget } from './TurnstileWidget';
 
 interface Option {
   slug?: string;
@@ -25,14 +27,20 @@ export function ReportForm({
   serviceSlug,
   issueTypes,
   states,
+  turnstileSiteKey = null,
 }: {
   serviceSlug: string;
   issueTypes: Option[];
   states: Option[];
+  /** Clave pública de Turnstile; null = desactivado (no se carga nada de Cloudflare). */
+  turnstileSiteKey?: string | null;
 }) {
   const formId = useId();
   const [state, setState] = useState<SubmitState>({ kind: 'idle' });
   const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  // Los tokens son de un solo uso: tras cada intento se pide uno nuevo.
+  const [turnstileReset, setTurnstileReset] = useState(0);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,8 +59,10 @@ export function ReportForm({
           networkCarrier: form.get('networkCarrier') || undefined,
           comment: form.get('comment') || undefined,
           deviceSeed: getDeviceSeed(),
+          turnstileToken: turnstileToken ?? undefined,
         }),
       });
+      if (turnstileSiteKey) setTurnstileReset((n) => n + 1);
 
       const json = await res.json();
 
@@ -198,11 +208,20 @@ export function ReportForm({
         </span>
       </label>
 
+      {turnstileSiteKey && (
+        <TurnstileWidget
+          siteKey={turnstileSiteKey}
+          scriptUrl={TURNSTILE_SCRIPT_URL}
+          onToken={setTurnstileToken}
+          resetSignal={turnstileReset}
+        />
+      )}
+
       {state.kind === 'error' && <p className="text-sm text-status-incident">{state.message}</p>}
 
       <button
         type="submit"
-        disabled={state.kind === 'sending' || !consent}
+        disabled={state.kind === 'sending' || !consent || (turnstileSiteKey !== null && !turnstileToken)}
         className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {state.kind === 'sending' ? 'Enviando…' : 'Enviar reporte'}
