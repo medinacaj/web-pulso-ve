@@ -46,7 +46,8 @@
 - **Monitoreo real:** no hay un trabajador aprobado y permanente; definir fuentes oficiales verificadas y programador compatible, posiblemente fuera del hosting web.
 - **Autenticación/Centro de Control:** no están operativos; no activar acceso público administrativo.
 - **Correo y alerta:** deben probarse con proveedor y dominio reales.
-- **Observabilidad:** `/api/health` solo comprueba la conexión a PostgreSQL; no garantiza monitoreo, correo ni permisos.
+- **Motor de incidentes:** necesita una tarea cron de cPanel que ejecute `npm run aggregate:run` (sin `--at`) cada 5 o 15 minutos, desde un entorno con el código y sus dependencias (como el runner de `docs/MONITOREO-REAL.md`; no forma parte del ZIP standalone). Procesa solo ventanas cerradas y recupera hasta 8 pendientes, así que un retraso o una ejecución perdida no deja huecos; repetirlo no duplica nada. Sin esa tarea no se abren ni cierran incidentes, y las páginas avisan «Datos desactualizados». **Sin configurar ni probar en Namecheap.**
+- **Observabilidad:** `/api/health` solo comprueba la conexión a PostgreSQL; no garantiza monitoreo, correo ni permisos. `/api/health/engine` responde 200 solo si el motor se ejecutó en los últimos `ENGINE_FRESHNESS_SECONDS` (3600 por defecto), y 503 si nunca se ejecutó o se detuvo.
 - **Privacidad:** identificar jurisdicciones, datos personales, tratamiento y retención; documentar controles antes de habilitar usuarios reales.
 
 ## Referencias oficiales

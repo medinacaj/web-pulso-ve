@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import { getHomeData } from '@/lib/queries/home';
+import { EngineFreshnessNotice } from '@/components/ui/EngineFreshnessNotice';
+import { getEngineFreshness } from '@/lib/queries/engine';
 export const dynamic='force-dynamic';
 export const metadata:Metadata={title:'Estadísticas',description:'Cifras agregadas de reportes e incidentes con sus limitaciones.',alternates:{canonical:'/estadisticas'}};
 export default async function StatisticsPage(){
  const {totals,generatedAt,services,hasAnyActivity}=await getHomeData();
  const values=[['Reportes últimas 24 h',totals.reportsLast24h],['Reportes históricos',totals.reportsAllTime],['Servicios activos',totals.servicesCount],['Incidentes sin resolver',totals.incidentsOpen]];
+ const freshness=await getEngineFreshness();
  return <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+  <EngineFreshnessNotice freshness={freshness} />
    <h1 className="font-display text-3xl font-semibold">Estadísticas agregadas</h1>
    <p className="mt-3 text-sm text-ink-muted">Corte {new Intl.DateTimeFormat('es-VE',{timeZone:'America/Caracas',dateStyle:'medium',timeStyle:'short'}).format(generatedAt)} (hora Venezuela). Son registros recibidos, no estimaciones de población afectada.</p>
    <dl className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{values.map(([name,value])=><div key={String(name)} className="rounded-lg border border-border bg-surface p-4"><dt className="text-sm text-ink-muted">{name}</dt><dd className="mt-2 font-mono text-2xl">{value}</dd></div>)}</dl>

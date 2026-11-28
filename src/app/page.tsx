@@ -5,6 +5,8 @@ import { ServicePulseCard } from '@/components/home/ServicePulseCard';
 import { HomeAutoRefresh } from '@/components/home/HomeAutoRefresh';
 import { OfficialMicrosoftStatus } from '@/components/home/OfficialMicrosoftStatus';
 import { ROUTE, isRouteAvailable } from '@/lib/nav';
+import { EngineFreshnessNotice } from '@/components/ui/EngineFreshnessNotice';
+import { getEngineFreshness } from '@/lib/queries/engine';
 
 // Citizen activity is time-sensitive and must not be served from a stale static page.
 export const dynamic = 'force-dynamic';
@@ -18,11 +20,16 @@ const METHODOLOGY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const data = await getHomeData();
+  const [data, freshness] = await Promise.all([getHomeData(), getEngineFreshness()]);
 
   return (
     <>
       <HomeAutoRefresh />
+      {freshness.state !== 'fresh' && (
+        <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
+          <EngineFreshnessNotice freshness={freshness} className="" />
+        </div>
+      )}
       {/* Compact search-first intro: usage guidance lives in the footer. */}
       <section className="home-hero border-b border-border">
         <div className="mx-auto grid max-w-6xl gap-4 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">

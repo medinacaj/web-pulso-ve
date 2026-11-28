@@ -94,12 +94,22 @@ Se añadió un runner de una sola ejecución: `npm run monitor:run`. Solo se act
 ## El motor de anomalías
 
 ```bash
-npm run aggregate:run -- --window=15 --at=2026-10-01T13:00:00Z
+npm run aggregate:run                                          # modo cron
+npm run aggregate:run -- --window=15 --at=2026-10-01T13:00:00Z # una ventana concreta
 ```
-Agrega la ventana indicada (todos los servicios activos), recalcula líneas
-base, puntúa anomalías y actualiza incidentes. Sin `--at`, usa el momento
-actual; sin `--window`, 15 minutos. Pensado para correr periódicamente
-(cron externo) — este proyecto no incluye scheduler propio todavía.
+Agrega (todos los servicios activos), recalcula líneas base, puntúa anomalías
+y actualiza incidentes. **Sin `--at` (modo cron)** procesa solo ventanas
+**cerradas**: las pendientes desde la última procesada, en orden y como mucho 8
+(2 h), así que una ejecución perdida no deja huecos (el ciclo de incidentes
+exige ventanas consecutivas) y una ventana en curso nunca se agrega a medias.
+Repetirlo sin ventanas pendientes no hace nada, así que el cron puede ir cada
+5 minutos. Con `--at` procesa exactamente la ventana que contiene esa fecha.
+El proyecto no programa el cron: ver `docs/DESPLIEGUE-NAMECHEAP.md`.
+
+Si el motor lleva `ENGINE_FRESHNESS_SECONDS` (3600 por defecto) sin ejecutarse,
+inicio, directorio, servicio, incidentes y estadísticas avisan «Datos
+desactualizados» («Sin análisis todavía» si nunca se ejecutó), y
+`GET /api/health/engine` responde 503 (200 solo con un ciclo reciente).
 
 Para ver el ciclo completo (línea base → anomalía → incidente → resolución)
 sin esperar tráfico real:
@@ -207,7 +217,7 @@ esta carpeta. Cómo llegó aquí el proyecto, qué falta resolver y qué se veri
 | `npm run db:seed` | Carga los datos semilla (idempotente): sincroniza categorías y tipos de problema; inserta los estados y servicios que falten |
 | `npm run db:studio` | Explorador visual de la base de datos |
 | `npm run create-admin` | Bootstrap de **un único administrador de staging**, requiere secretos privados, TOTP y PostgreSQL; no se ejecuta automáticamente. Ver `docs/ADMIN-SEGURIDAD.md`. |
-| `npm run aggregate:run -- [--window=N] [--at=ISO]` | Un ciclo del motor: agregación + línea base + anomalías + incidentes |
+| `npm run aggregate:run -- [--window=N] [--at=ISO]` | Motor: sin `--at`, ventanas cerradas pendientes (modo cron); con `--at`, esa ventana |
 | `npm run dev:synthetic-traffic -- [--cleanup]` | Genera/limpia tráfico sintético para probar el motor (ver sección dedicada) |
 
 ## Variables de entorno
@@ -352,7 +362,8 @@ El catálogo y la aplicación Next.js comparten código y recursos de marca, per
 - **Vista previa estática de GitHub Pages**: genera 579 fichas demostrativas con gráficos ficticios claramente identificados y sin transmisión de reportes. Su aprobación en CI no confirma la publicación del bundle ni demuestra monitorización activa.
 - **Logos**: recursos locales con procedencia documentada y fallback tipográfico. Véase `docs/LOGOS_EMPRESAS.md`. No se deben sustituir recursos faltantes con logotipos inventados o de otras empresas.
 
-El `package-lock.json` revisado resuelve `next@16.4.1`, `zod@4.6.7`,
+El `package-lock.json` revisado resuelve `next@16.4.6` (actualizado el 28/11/2026: 16.4.1 tenía avisos
+moderados, GHSA-mfr8-8qww-v76h y otros, y `next build` se detenía con `SecurityFatalError`), `zod@4.6.7`,
 `sharp@0.35.5` y `source-map-js@1.2.2`. [La verificación de integración #43374657924](https://github.com/medinacaj/web-downdetector-ve/actions/runs/43374657924)
 ejecutó `npm audit --omit=dev --audit-level=high` con resultado
 `found 0 vulnerabilities` para ese build. El control programado de auditoría

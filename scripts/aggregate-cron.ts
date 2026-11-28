@@ -1,21 +1,24 @@
 /**
- * Orquesta un ciclo completo del motor de detección para todos los
- * servicios activos: agrega la ventana actual, recalcula líneas base,
- * puntúa anomalías y actualiza el ciclo de vida de incidentes.
+ * Ejecuta el motor de detección para todos los servicios activos: agrega,
+ * recalcula líneas base, puntúa anomalías y actualiza el ciclo de vida de
+ * incidentes (src/lib/engine/cycle.ts).
  *
- * Uso: npm run aggregate:run -- --window=15 --at=2026-08-17T14:00:00Z
- * Pensado para invocarse periódicamente (cron externo, GitHub Actions
- * scheduled, etc.) — este proyecto no incluye un scheduler propio todavía
- * (ver docs/00-PLAN-MAESTRO.md, pendientes de la Etapa 3).
+ * Sin `--at` (modo cron): procesa las ventanas **cerradas** pendientes desde la
+ * última procesada, en orden y como mucho MAX_CATCH_UP_WINDOWS
+ * (src/lib/engine/windows.ts). Una ventana en curso no se toca: agregarla a mitad
+ * perdería los reportes posteriores. Ejecutarlo dos veces seguidas no hace nada la
+ * segunda, así que el cron puede ir cada 5 minutos (mínimo de Namecheap).
+ *
+ * Con `--at`: procesa exactamente la ventana que contiene esa fecha (pruebas y
+ * tráfico sintético, como antes).
+ *
+ * Uso: npm run aggregate:run                         (cron)
+ *      npm run aggregate:run -- --window=15 --at=2026-08-17T14:00:00Z
+ * La programación del cron no se hace desde el código: ver docs/DESPLIEGUE-NAMECHEAP.md.
  */
 import 'dotenv/config';
-import { and, eq, isNull } from 'drizzle-orm';
-import { db } from '../src/lib/db/client';
-import { services, aggregatedWindows } from '../src/lib/db/schema';
-import { aggregateWindow } from '../src/lib/engine/aggregate';
-import { recomputeBaselines } from '../src/lib/engine/baseline';
-import { scoreWindow } from '../src/lib/engine/anomaly';
-import { updateIncidentLifecycle } from '../src/lib/engine/incident-lifecycle';
+import { lastProcessedWindowStart, runEngineCycle } from '../src/lib/engine/cycle';
+import { windowStartFor, windowsToProcess } from '../src/lib/engine/windows';
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -23,74 +26,23 @@ function parseArgs() {
   const atArg = args.find((a) => a.startsWith('--at='));
   return {
     windowMinutes: windowArg ? Number(windowArg.split('=')[1]) : 15,
-    at: atArg ? new Date(atArg.split('=')[1]) : new Date(),
+    at: atArg ? new Date(atArg.split('=')[1]) : null,
   };
-}
-
-/** Redondea hacia abajo al múltiplo de windowMinutes más cercano, para que ventanas consecutivas no se solapen. */
-function floorToWindow(date: Date, windowMinutes: number): Date {
-  const ms = windowMinutes * 60_000;
-  return new Date(Math.floor(date.getTime() / ms) * ms);
 }
 
 async function main() {
   const { windowMinutes, at } = parseArgs();
-  const windowStart = floorToWindow(at, windowMinutes);
+  const log = (line: string) => console.log(line);
 
-  console.log(`→ Ciclo del motor — ventana ${windowMinutes}min, inicio ${windowStart.toISOString()}`);
-
-  console.log('  1/4 agregando reportes por ventana...');
-  const aggregated = await aggregateWindow(windowStart, windowMinutes);
-  console.log(`      ${aggregated.length} servicios agregados`);
-
-  console.log('  2/4 recalculando líneas base...');
-  const { bucketsUpdated } = await recomputeBaselines(at);
-  console.log(`      ${bucketsUpdated} buckets (servicio×estado×día×hora) actualizados`);
-
-  console.log('  3/4 puntuando anomalías...');
-  const activeServices = await db.select({ id: services.id, name: services.name }).from(services).where(eq(services.active, true));
-
-  let scored = 0;
-  const incidentActions: string[] = [];
-
-  for (const service of activeServices) {
-    const result = await scoreWindow(service.id, windowStart, windowMinutes);
-    if (!result) continue;
-
-    await db
-      .update(aggregatedWindows)
-      .set({ anomalyScore: result.anomalyScore, confidence: result.confidence, technicalScore: result.technicalScore })
-      .where(and(eq(aggregatedWindows.serviceId, service.id), eq(aggregatedWindows.windowStart, windowStart)));
-    scored++;
-
-    const [current] = await db
-      .select({ uniqueReporters: aggregatedWindows.uniqueReporters })
-      .from(aggregatedWindows)
-      .where(and(
-        eq(aggregatedWindows.serviceId, service.id),
-        isNull(aggregatedWindows.stateId),
-        eq(aggregatedWindows.windowStart, windowStart),
-      ))
-      .limit(1);
-
-    const lifecycle = await updateIncidentLifecycle(
-      service.id,
-      windowStart,
-      result.confidence,
-      current?.uniqueReporters ?? 0,
-      windowMinutes,
-    );
-    if (lifecycle.action !== 'none') {
-      incidentActions.push(`${service.name}: ${lifecycle.action} (confianza ${result.confidence.toFixed(1)})`);
-    }
-  }
-  console.log(`      ${scored} servicios puntuados`);
-
-  console.log('  4/4 ciclo de incidentes...');
-  if (incidentActions.length === 0) {
-    console.log('      sin cambios de estado en incidentes');
+  if (at) {
+    await runEngineCycle(windowStartFor(at, windowMinutes), windowMinutes, { baselineAt: at, log });
   } else {
-    incidentActions.forEach((line) => console.log(`      ${line}`));
+    const pending = windowsToProcess(await lastProcessedWindowStart(), new Date(), windowMinutes);
+    if (pending.length === 0) console.log('→ Sin ventanas cerradas pendientes.');
+    for (const [i, windowStart] of pending.entries()) {
+      // Las líneas base se recalculan una vez por ejecución, no por cada ventana recuperada.
+      await runEngineCycle(windowStart, windowMinutes, { recompute: i === 0, log });
+    }
   }
 
   console.log('✓ Ciclo completado.');

@@ -11,6 +11,8 @@ import { TechnicalHistoryChart } from '@/components/service/TechnicalHistoryChar
 import { TopIssuesBreakdown } from '@/components/service/TopIssuesBreakdown';
 import { ServiceComments } from '@/components/service/ServiceComments';
 import { getServiceProfile } from '@/lib/catalog/service-profiles';
+import { EngineFreshnessNotice } from '@/components/ui/EngineFreshnessNotice';
+import { getEngineFreshness } from '@/lib/queries/engine';
 
 function formatDateTime(date: Date | null) {
   if (!date) return null;
@@ -53,8 +55,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const { service, statusDetail, issueTypeOptions, issueBreakdown, recentIncidents, timelineIncidents, affectedStates, allStates, history, approvedComments } = data;
   const profile = getServiceProfile({slug: service.slug, name: service.name, categorySlug: service.category.slug, categoryName: service.category.name, description: service.description});
 
+  const freshness = await getEngineFreshness();
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <EngineFreshnessNotice freshness={freshness} className="mb-5" />
       {/* Ficha editorial y estado, independientes de las mediciones. */}
       <nav aria-label="Ruta de navegación" className="mb-5 text-sm text-ink-muted">
         <Link href="/servicios" className="underline underline-offset-2 hover:text-ink">Todos los servicios</Link>
